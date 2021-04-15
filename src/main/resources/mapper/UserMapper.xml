@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.UserDao">
+    <resultMap type="User" id="userResultMap" >
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPassWord" column="user_password"/>
+        <result property="userPhone" column="user_phone"/>
+        <result property="userMoney" column="user_money"/>
+        <result property="userCoupon" column="user_coupon"/>
+
+    </resultMap>
+    <!-- id:statement的id 或者叫做sql的id-->
+    <!-- parameterType:声明输入参数的类型 -->
+    <!-- resultType:声明输出结果的类型，应该填写pojo的全路径 -->
+    <!-- #{}：输入参数的占位符，相当于jdbc的？ -->
+
+    <insert id="register" parameterType="User">
+        INSERT INTO table_user(user_id,user_name,user_password,user_phone) VALUE (#{userId},#{userName},#{userPassWord},#{userPhone})
+    </insert>
+    <!-- resultType:不写可能出A quary......错误 -->
+    <select id="login" parameterType="User" resultMap="userResultMap">
+    select*from table_user where user_phone=#{userPhone} and user_password=#{userPassWord}
+    </select>
+
+
+
+    <update id="updateUser" parameterType="User">
+        UPDATE table_user
+        SET user_name = #{userName},user_password = #{userPassWord},user_phone = #{userPhone}
+        WHERE  user_id = #{userId}
+    </update>
+    <!--
+    &lt;!&ndash;resultType 以前写的user ，为啥不能用呢？ 因为映射只在resultmap设置了，如下的话就能用&ndash;&gt;
+    -->
+    <select id="queryById" resultMap="userResultMap" parameterType="long">
+        SELECT user_id,user_name,user_password,user_phone,user_money,user_coupon
+        FROM table_user
+        WHERE user_id=#{userId}
+    </select>
+
+
+
+
+
+      <select id="queryAllUser" resultMap="userResultMap">
+        SELECT user_id,user_name,user_password,user_phone,user_money,user_coupon
+        FROM table_user
+    </select>
+
+
+    <delete id="deleteUserById" parameterType="long">
+        DELETE FROM table_user WHERE user_id=#{userId}
+    </delete>
+
+
+
+
+</mapper>

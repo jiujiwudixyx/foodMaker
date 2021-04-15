@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.AdminDao">
+    <resultMap type="Admin" id="adminResultMap" >
+        <id property="adminId" column="admin_id"/>
+        <result property="adminName" column="admin_name"/>
+        <result property="adminPassWord" column="admin_password"/>
+        <result property="adminPhone" column="admin_phone"/>
+       
+
+    </resultMap>
+    <!-- id:statement的id 或者叫做sql的id-->
+    <!-- parameterType:声明输入参数的类型 -->
+    <!-- resultType:声明输出结果的类型，应该填写pojo的全路径 -->
+    <!-- #{}：输入参数的占位符，相当于jdbc的？ -->
+
+    <insert id="register" parameterType="Admin">
+        INSERT INTO table_admin(admin_id,admin_name,admin_password,admin_phone) VALUE (#{adminId},#{adminName},#{adminPassWord},#{adminPhone})
+    </insert>
+    <!-- resultType:不写可能出A quary......错误 -->
+    <select id="login" parameterType="Admin" resultMap="adminResultMap">
+    select*from table_admin where admin_phone=#{adminPhone} and admin_password=#{adminPassWord}
+    </select>
+<!--
+    <delete id="deleteAdminById" parameterType="long">
+        DELETE FROM table_admin WHERE id=#{adminId}
+    </delete>
+
+    <update id="updateAdmin" parameterType="Admin">
+        UPDATE table_admin
+        SET name = #{adminName},password = #{adminPassWord}
+        WHERE  id = #{adminId}
+    </update>
+    &lt;!&ndash;resultType 以前写的admin ，为啥不能用呢？ 因为映射只在resultmap设置了，如下的话就能用&ndash;&gt;
+    <select id="queryById" resultType="Admin" parameterType="long">
+        SELECT id as adminId,name as adminName,password as adminPassWord
+        FROM table_admin
+        WHERE id=#{adminId}
+    </select>
+    <select id="queryAllAdmin" resultMap="adminResultMap">
+        SELECT id,name,password
+        FROM table_admin
+    </select>-->
+
+</mapper>

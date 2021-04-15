@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.OrderDao">
+    <resultMap type="Order" id="orderResultMap">
+
+        <id property="orderId" column="order_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="chefId" column="chef_id"/>
+        <result property="orderAddress" column="order_address"/>
+        <result property="orderTimeCreate" column="order_time_create"/>
+        <result property="orderTimeService" column="order_time_service"/>
+        <result property="orderCaixi" column="order_caixi"/>
+        <result property="orderTaocan" column="order_taocan"/>
+        <result property="orderNote" column="order_note"/>
+        <result property="orderPrice" column="order_price"/>
+        <result property="orderStatus" column="order_status"/>
+
+
+    </resultMap>
+    <insert id="addOrder" parameterType="Order">
+        INSERT INTO table_order(user_id,order_address,order_time_create,order_time_service,order_caixi,order_taocan,order_note,order_price) VALUE (#{userId},#{orderAddress},#{orderTimeCreate},#{orderTimeService},#{orderCaixi},#{orderTaocan},#{orderNote},#{orderPrice})
+    </insert>
+
+    <delete id="deleteOrderById" parameterType="long">
+        DELETE FROM table_order WHERE order_id=#{orderId}
+    </delete>
+
+    <update id="payOrderById" parameterType="long">
+        UPDATE table_order
+          SET
+          order_status = "已支付"
+
+          WHERE  order_id = #{orderId}
+    </update>
+
+
+
+
+
+    <update id="chefGetById" parameterType="Order">
+        UPDATE table_order
+        SET
+        chef_id = #{chefId}
+
+        WHERE  order_id = #{orderId}
+    </update>
+
+
+
+    <update id="updateOrder" parameterType="Order">
+          UPDATE table_order
+          SET
+          order_address = #{orderAddress},order_time_service = #{orderTimeService},
+          order_caixi = #{orderCaixi},order_taocan = #{orderTaocan},order_note = #{orderNote}
+
+          WHERE  order_id = #{orderId}
+      </update>
+
+
+    <select id="queryById" resultMap="orderResultMap" parameterType="long">
+        SELECT order_id,user_id,chef_id,order_address,order_time_create,order_time_service,order_caixi,order_taocan,order_note,order_price,order_status
+        FROM table_order
+        WHERE order_id=#{orderId}
+    </select>
+    <!--查询全部-->
+    <select id="queryAllOrder" resultMap="orderResultMap">
+        SELECT order_id,user_id,chef_id,order_address,order_time_create,order_time_service,order_caixi,order_taocan,order_note,order_price,order_status
+        FROM table_order
+    </select>
+    <!--通过管理员查询，未完成-->
+    <select id="queryAllOrder1" resultMap="orderResultMap">
+        SELECT order_id,user_id,chef_id,order_address,order_time_create,order_time_service,order_caixi,order_taocan,order_note,order_price,order_status
+        FROM table_order
+        WHERE order_status="未支付" AND chef_id IS NOT NULL
+    </select>
+    <!--查询已完成-->
+    <select id="queryAllOrder2" resultMap="orderResultMap">
+        SELECT order_id,user_id,chef_id,order_address,order_time_create,order_time_service,order_caixi,order_taocan,order_note,order_price,order_status
+        FROM table_order
+        WHERE order_status="已支付"
+    </select>
+    <!--订单大厅，查询未接单-->
+    <select id="queryAllOrder3" resultMap="orderResultMap">
+        SELECT order_id,user_id,chef_id,order_address,order_time_create,order_time_service,order_caixi,order_taocan,order_note,order_price,order_status
+        FROM table_order
+        WHERE chef_id IS NULL
+    </select>
+    <!--通过厨师查询，未完成-->
+    <select id="queryAllOrder4" resultMap="orderResultMap" parameterType="long">
+        SELECT order_id,user_id,chef_id,order_address,order_time_create,order_time_service,order_caixi,order_taocan,order_note,order_price,order_status
+        FROM table_order
+        WHERE order_status="未支付" AND chef_id = #{chefId}
+    </select>
+    <!--通过厨师查询，已完成-->
+    <select id="queryAllOrder5" resultMap="orderResultMap" parameterType="long">
+        SELECT order_id,user_id,chef_id,order_address,order_time_create,order_time_service,order_caixi,order_taocan,order_note,order_price,order_status
+        FROM table_order
+        WHERE order_status="已支付" AND chef_id = #{chefId}
+    </select>
+
+    <!--通过用户查询，未完成-->
+    <select id="queryAllOrder6" resultMap="orderResultMap" parameterType="long">
+        SELECT order_id,user_id,chef_id,order_address,order_time_create,order_time_service,order_caixi,order_taocan,order_note,order_price,order_status
+        FROM table_order
+        WHERE order_status="未支付" AND user_id = #{userId}
+    </select>
+    <!--通过用户查询，已完成-->
+    <select id="queryAllOrder7" resultMap="orderResultMap" parameterType="long">
+        SELECT order_id,user_id,chef_id,order_address,order_time_create,order_time_service,order_caixi,order_taocan,order_note,order_price,order_status
+        FROM table_order
+        WHERE order_status="已支付" AND user_id = #{userId}
+    </select>
+</mapper>

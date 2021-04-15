@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ChefDao">
+    <resultMap type="Chef" id="chefResultMap" >
+        <id property="chefId" column="chef_id"/>
+        <result property="chefName" column="chef_name"/>
+        <result property="chefPassWord" column="chef_password"/>
+        <result property="chefPhone" column="chef_phone"/>
+        <result property="chefCaixi" column="chef_caixi"/>
+        <result property="chefMoney" column="chef_money"/>
+      
+
+    </resultMap>
+    <!-- id:statement的id 或者叫做sql的id-->
+    <!-- parameterType:声明输入参数的类型 -->
+    <!-- resultType:声明输出结果的类型，应该填写pojo的全路径 -->
+    <!-- #{}：输入参数的占位符，相当于jdbc的？ -->
+
+    <insert id="register" parameterType="Chef">
+        INSERT INTO table_chef(chef_id,chef_name,chef_password,chef_caixi,chef_phone) VALUE (#{chefId},#{chefName},#{chefPassWord},#{chefCaixi},#{chefPhone})
+    </insert>
+    <!-- resultType:不写可能出A quary......错误 -->
+    <select id="login" parameterType="Chef" resultMap="chefResultMap">
+    select*from table_chef where chef_phone=#{chefPhone} and chef_password=#{chefPassWord}
+    </select>
+
+
+
+    <update id="updateChef" parameterType="Chef">
+        UPDATE table_chef
+        SET chef_name = #{chefName},chef_password = #{chefPassWord},chef_caixi=#{chefCaixi},chef_phone=#{chefPhone}
+        WHERE  chef_id = #{chefId}
+    </update>
+    <!--
+    &lt;!&ndash;resultType 以前写的chef ，为啥不能用呢？ 因为映射只在resultmap设置了，如下的话就能用&ndash;&gt;
+    -->
+    <select id="queryById" resultMap="chefResultMap" parameterType="long">
+        SELECT chef_id,chef_name,chef_password,chef_phone,chef_caixi,chef_money
+        FROM table_chef
+        WHERE chef_id=#{chefId}
+    </select>
+
+
+
+
+    <delete id="deleteChefById" parameterType="long">
+        DELETE FROM table_chef WHERE chef_id=#{chefId}
+    </delete>
+
+    <select id="queryAllChef" resultMap="chefResultMap">
+        SELECT chef_id,chef_name,chef_password,chef_phone,chef_caixi,chef_money
+        FROM table_chef
+    </select>
+
+</mapper>
